@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
 {
-    public GameObject[] animalPrefabs;
-    public float xRange = 14.0f;
-    public float zRange = 25.0f;
-
-    private float startDelay = 2.0f;
-    private float spawnDelay = 1.5f;
-
+    
+    public GameObject[] ball;
+    private float spawnTime;
+    
+   
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
@@ -22,17 +20,26 @@ public class SpawnManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.S))
         {
-            InvokeRepeating("SpawnRandomAnimal", startDelay, spawnDelay);
-            
+            InvokeRandom();
         }
     }
-    void SpawnRandomAnimal()
+
+    void InvokeRandom()
     {
-        int randomNum = Random.Range(0, animalPrefabs.Length);
-        float xRandomSpawn = Random.Range(-xRange, xRange);
+        UpdateSpawnTime();
+        Invoke(nameof(RandomSpawn), spawnTime);
+    }
+    void UpdateSpawnTime()
+    {
+        spawnTime = Random.Range(2, 5);
+    }
 
+    void RandomSpawn()
+    {
+        float randomNum = Random.Range(10, 30);
+        int ballIndex = Random.Range(0, 3);
 
-        Instantiate(animalPrefabs[randomNum], new Vector3(xRandomSpawn, 0, zRange), animalPrefabs[randomNum].transform.rotation);
-
+        Instantiate(ball[ballIndex], new Vector3(0, 10, randomNum), ball[ballIndex].transform.rotation);
+        InvokeRandom();
     }
 }
